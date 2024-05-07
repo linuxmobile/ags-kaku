@@ -32,8 +32,7 @@ class Recorder extends Service {
 		Utils.ensureDirectory(this.#recordings);
 		this.#file = `${this.#recordings}/${now()}.mp4`;
 		sh(
-			`wl-screenrec -g "${await sh("slurp")}" -f ${
-				this.#file
+			`wl-screenrec -g "${await sh("slurp")}" -f ${this.#file
 			} --pixel-format yuv420p`,
 		);
 
@@ -60,8 +59,12 @@ class Recorder extends Service {
 			summary: "Screenrecord",
 			body: this.#file,
 			actions: {
-				"Show in Files": () => sh(`xdg-open ${this.#recordings}`),
-				View: () => sh(`xdg-open ${this.#file}`),
+				"Show in Files": () =>
+					sh(
+						`/etc/profiles/per-user/linuxmobile/bin/xdg-open ${this.#recordings}`,
+					),
+				View: () =>
+					sh(`/etc/profiles/per-user/linuxmobile/bin/xdg-open ${this.#file}`),
 			},
 		});
 	}
@@ -81,15 +84,17 @@ class Recorder extends Service {
 			await sh(`wayshot -f ${file} -s "${size}"`);
 		}
 
-		bash(`wl-copy < ${file}`);
+		bash(`wl-copy -t image/png < ${file}`);
 
 		Utils.notify({
 			image: file,
 			summary: "Screenshot",
 			body: file,
 			actions: {
-				"Show in Files": () => sh(`xdg-open ${this.#screenshots}`),
-				View: () => sh(`xdg-open ${file}`),
+				"Show in Files": () =>
+					sh(`/etc/profiles/per-user/linuxmobile/bin/xdg-open ${this.#screenshots}`),
+				View: () =>
+					sh(`/etc/profiles/per-user/linuxmobile/bin/xdg-open ${file}`),
 				Edit: () => {
 					if (dependencies("swappy")) sh(`swappy -f ${file}`);
 				},

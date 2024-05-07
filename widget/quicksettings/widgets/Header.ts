@@ -17,11 +17,11 @@ function formatTimeUntilCharged(seconds: number) {
 	const minutes: number = Math.floor((seconds % 3600) / 60);
 
 	let result: string = "";
-	if (hours > 0){
+	if (hours > 0) {
 		result += hours + " hour";
 		if (hours > 1) result += "s";
 	}
-	if (minutes > 0){
+	if (minutes > 0) {
 		if (result !== "") result += " ";
 		result += minutes + " minute";
 		if (minutes > 1) result += "s";
@@ -31,7 +31,7 @@ function formatTimeUntilCharged(seconds: number) {
 
 const TimeRemaining = () => {
 	return Widget.Box([
-		Widget.Icon({icon: battery.bind("icon_name")}),
+		Widget.Icon({ icon: battery.bind("icon_name") }),
 		Widget.Label({
 			class_name: "time-remaining",
 			hpack: "start",
@@ -42,19 +42,19 @@ const TimeRemaining = () => {
 
 					if (charging) {
 						return hoursMinutes === ""
-						? "Charging"
-						: `${hoursMinutes} until fully charged`;
+							? "Charging"
+							: `${hoursMinutes} until fully charged`;
 					} else {
 						return hoursMinutes === ""
-						? "Discharging"
-						: `About ${hoursMinutes} left`;
+							? "Discharging"
+							: `About ${hoursMinutes} left`;
 					}
-				}
+				},
 			),
 			css: "padding: 0 0 0 5pt;",
-		})
-	])
-}
+		}),
+	]);
+};
 
 // const Avatar = () => Widget.Box({
 //     class_name: "avatar",
@@ -111,6 +111,5 @@ export const Header = () =>
 				App.openWindow("settings-dialog");
 			},
 		}),
-		SysButton("logout"),
 		SysButton("shutdown"),
 	);

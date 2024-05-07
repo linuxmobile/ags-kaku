@@ -1,9 +1,9 @@
 import BatteryBar from "./buttons/BatteryBar";
 import ColorPicker from "./buttons/ColorPicker";
 import Date from "./buttons/Date";
-import Launcher from "./buttons/Launcher";
+// import Launcher from "./buttons/Launcher";
 import Media from "./buttons/Media";
-import PowerMenu from "./buttons/PowerMenu";
+// import PowerMenu from "./buttons/PowerMenu";
 import SysTray from "./buttons/SysTray";
 import SystemIndicators from "./buttons/SystemIndicators";
 import Workspaces from "./buttons/Workspaces";
@@ -20,9 +20,9 @@ const widget = {
 	battery: BatteryBar,
 	colorpicker: ColorPicker,
 	date: Date,
-	launcher: Launcher,
+	// launcher: Launcher,
 	media: Media,
-	powermenu: PowerMenu,
+	// powermenu: PowerMenu,
 	systray: SysTray,
 	system: SystemIndicators,
 	workspaces: Workspaces,
@@ -42,21 +42,15 @@ export default (monitor: number) =>
 			css: "min-width: 2px; min-height: 2px;",
 			startWidget: Widget.Box({
 				hexpand: true,
-				children: start
-					.bind()
-					.as((s) => s.filter((w) => w !== "taskbar").map((w) => widget[w]())),
+				children: start.bind().as((s) => s.map((w) => widget[w]())),
 			}),
 			centerWidget: Widget.Box({
 				hpack: "center",
-				children: center
-					.bind()
-					.as((c) => c.filter((w) => w !== "taskbar").map((w) => widget[w]())),
+				children: center.bind().as((c) => c.map((w) => widget[w]())),
 			}),
 			endWidget: Widget.Box({
 				hexpand: true,
-				children: end
-					.bind()
-					.as((e) => e.filter((w) => w !== "taskbar").map((w) => widget[w]())),
+				children: end.bind().as((e) => e.map((w) => widget[w]())),
 			}),
 		}),
 	});

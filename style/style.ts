@@ -93,16 +93,23 @@ async function resetCss() {
         const css = await bash`echo "${scss}" | sass --stdin`
 
         const FOOT_THEME = `${Utils.HOME}/.config/foot/theme.ini`
+        const HELIX_THEME = `${Utils.HOME}/.config/helix/themes/current.toml`
 
-        const fileContent = await Utils.readFile(FOOT_THEME)
+        let fileContent = await Utils.readFile(FOOT_THEME)
 
-        const newContent = fileContent
-        .replace(/background=.*/, `background=${t(dark.bg, light.bg).replace('#', '')}`)
-        .replace(/foreground=.*/, `foreground=${t(dark.fg, light.fg).replace('#', '')}`);
+        let newContent = fileContent
+            .replace(/background=.*/, `background=${t(dark.bg, light.bg).replace('#', '')}`)
+            .replace(/foreground=.*/, `foreground=${t(dark.fg, light.fg).replace('#', '')}`);
 
         App.applyCss(css, true)
 
         await Utils.writeFile(newContent, FOOT_THEME)
+
+        fileContent = await Utils.readFile(HELIX_THEME);
+        newContent = scheme.value === "dark"
+            ? fileContent.replace(/inherits = "latte"/, 'inherits = "mocha"')
+            : fileContent.replace(/inherits = "mocha"/, 'inherits = "latte"');
+        await Utils.writeFile(newContent, HELIX_THEME);
     } catch (error) {
         logError(error)
     }

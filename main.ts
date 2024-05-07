@@ -3,6 +3,7 @@ import "style/style";
 import init from "lib/init";
 import options from "options";
 import Bar from "widget/bar/Bar";
+import Launcher from "widget/launcher/Launcher";
 import NotificationPopups from "widget/notifications/NotificationPopups";
 import OSD from "widget/osd/OSD";
 import Overview from "widget/overview/Overview";
@@ -31,6 +32,7 @@ App.config({
 		...forMonitors(NotificationPopups),
 		...forMonitors(ScreenCorners),
 		...forMonitors(OSD),
+		Launcher(),
 		Overview(),
 		PowerMenu(),
 		SettingsDialog(),

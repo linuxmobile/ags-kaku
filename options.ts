@@ -68,7 +68,7 @@ const options = mkOptions(OPTIONS, {
 		corners: opt(true),
 		layout: {
 			start: opt<Array<import("widget/bar/Bar").BarWidget>>([
-				"launcher",
+				// "launcher",
 				"workspaces",
 				"expander",
 				"messages",
@@ -82,7 +82,7 @@ const options = mkOptions(OPTIONS, {
 				"screenrecord",
 				"system",
 				"battery",
-				"powermenu",
+				// "powermenu",
 			]),
 		},
 		launcher: {
