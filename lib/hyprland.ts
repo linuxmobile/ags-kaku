@@ -31,10 +31,12 @@ const deps = [
 	scheme.id,
 ];
 
-function activeBorder() {
-	const color = scheme.value === "dark" ? darkActive.value : lightActive.value;
+function primary() {
+	return scheme.value === "dark" ? darkActive.value : lightActive.value;
+}
 
-	return color.replace("#", "");
+function rgba(color: string) {
+	return `rgba(${color}ff)`.replace("#", "");
 }
 
 function sendBatch(batch: string[]) {
@@ -53,8 +55,8 @@ async function setupHyprland() {
 		`general:border_size ${width}`,
 		`general:gaps_out 5`,
 		`general:gaps_in 5`,
-		`general:col.active_border rgba(${activeBorder()}ff)`,
-		`general:col.inactive_border rgba(${hyprland.inactiveBorder.value})`,
+		`general:col.active_border ${rgba(primary())}`,
+		`general:col.inactive_border ${rgba(hyprland.inactiveBorder.value)}`,
 		`decoration:rounding ${radius}`,
 		`decoration:drop_shadow ${shadows.value ? "yes" : "no"}`,
 		`dwindle:no_gaps_when_only ${hyprland.gapsWhenOnly.value ? 0 : 1}`,

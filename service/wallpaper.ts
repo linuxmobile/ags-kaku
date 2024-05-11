@@ -13,7 +13,7 @@ export type Market =
 	| "en-CA";
 
 const WP = `${Utils.HOME}/.config/background`;
-const Cache = `${Utils.HOME}/Pictures/Wallpapers/Bing`;
+const RandomWallpaperDirectory = `${Utils.HOME}/.local/share/backgrounds/LinuxLightDarkWallpapers`;
 
 class Wallpaper extends Service {
 	static {
@@ -32,15 +32,7 @@ class Wallpaper extends Service {
 		if (!dependencies("swww")) return;
 
 		sh("hyprctl cursorpos").then((pos) => {
-			sh([
-				"swww",
-				"img",
-				"--transition-type",
-				"grow",
-				"--transition-pos",
-				pos.replace(" ", ""),
-				WP,
-			]).then(() => {
+			sh(["swww", "img", "--transition-type", "grow", WP]).then(() => {
 				this.changed("wallpaper");
 			});
 		});
@@ -57,31 +49,25 @@ class Wallpaper extends Service {
 		this.#blockMonitor = false;
 	}
 
-	async #fetchBing() {
-		const res = await Utils.fetch("https://bing.biturl.top/", {
-			params: {
-				resolution: options.wallpaper.resolution.value,
-				format: "json",
-				image_format: "jpg",
-				index: "random",
-				mkt: options.wallpaper.market.value,
-			},
-		}).then((res) => res.text());
+	async #fetchRandomWallpaper() {
+		const theme = options.theme.scheme.getValue(); // Call the function to get the theme value
+		const suffix = theme === 'dark' ? '-d' : '-l';
 
-		if (!res.startsWith("{")) return console.warn("bing api", res);
+		// Ensure that RandomWallpaperDirectory contains the correct path
+		const files = (await sh(`ls ${RandomWallpaperDirectory}`)).split('\n');
+		const matchingFiles = files.filter(file => file.includes(suffix) && (file.endsWith('.jpg') || file.endsWith('.png')));
 
-		const { url } = JSON.parse(res);
-		const file = `${Cache}/${url.replace("https://www.bing.com/th?id=", "")}`;
-
-		if (dependencies("curl")) {
-			Utils.ensureDirectory(Cache);
-			await sh(`curl "${url}" --output ${file}`);
-			this.#setWallpaper(file);
+		if (matchingFiles.length === 0) {
+			console.warn(`No wallpapers found for the ${theme} theme.`);
+			return;
 		}
+		const randomFile = matchingFiles[Math.floor(Math.random() * matchingFiles.length)];
+		const filePath = `${RandomWallpaperDirectory}/${randomFile}`;
+		this.#setWallpaper(filePath);
 	}
 
 	readonly random = () => {
-		this.#fetchBing();
+		this.#fetchRandomWallpaper();
 	};
 	readonly set = (path: string) => {
 		this.#setWallpaper(path);
