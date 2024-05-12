@@ -32,7 +32,16 @@ class Wallpaper extends Service {
 		if (!dependencies("swww")) return;
 
 		sh("hyprctl cursorpos").then((pos) => {
-			sh(["swww", "img", "--transition-type", "grow", WP]).then(() => {
+			sh([
+				"swww",
+				"img",
+				"--invert-y",
+				"--transition-type",
+				"grow",
+				"--transition-pos",
+				pos.replace(" ", ""),
+				WP,
+			]).then(() => {
 				this.changed("wallpaper");
 			});
 		});
@@ -51,17 +60,22 @@ class Wallpaper extends Service {
 
 	async #fetchRandomWallpaper() {
 		const theme = options.theme.scheme.getValue(); // Call the function to get the theme value
-		const suffix = theme === 'dark' ? '-d' : '-l';
+		const suffix = theme === "dark" ? "-d" : "-l";
 
 		// Ensure that RandomWallpaperDirectory contains the correct path
-		const files = (await sh(`ls ${RandomWallpaperDirectory}`)).split('\n');
-		const matchingFiles = files.filter(file => file.includes(suffix) && (file.endsWith('.jpg') || file.endsWith('.png')));
+		const files = (await sh(`ls ${RandomWallpaperDirectory}`)).split("\n");
+		const matchingFiles = files.filter(
+			(file) =>
+				file.includes(suffix) &&
+				(file.endsWith(".jpg") || file.endsWith(".png")),
+		);
 
 		if (matchingFiles.length === 0) {
 			console.warn(`No wallpapers found for the ${theme} theme.`);
 			return;
 		}
-		const randomFile = matchingFiles[Math.floor(Math.random() * matchingFiles.length)];
+		const randomFile =
+			matchingFiles[Math.floor(Math.random() * matchingFiles.length)];
 		const filePath = `${RandomWallpaperDirectory}/${randomFile}`;
 		this.#setWallpaper(filePath);
 	}

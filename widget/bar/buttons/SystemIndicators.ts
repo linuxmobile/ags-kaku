@@ -64,9 +64,9 @@ const BluetoothIndicator = () =>
 	Widget.Overlay({
 		class_name: "bluetooth",
 		passThrough: true,
+		visible: bluetooth.bind("enabled"),
 		child: Widget.Icon({
 			icon: icons.bluetooth.enabled,
-			visible: bluetooth.bind("enabled"),
 			css: "padding: 0 5pt 0 0;",
 		}),
 		overlay: Widget.Label({

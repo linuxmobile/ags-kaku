@@ -91,6 +91,11 @@ export default [
 		icons.ui.toolbars,
 		Group(
 			"General",
+			Row({
+				opt: b.transparent,
+				title: "Transparent Bar",
+				note: "Works best on empty-ish wallpapers",
+			}),
 			Row({ opt: b.flatButtons, title: "Flat Buttons" }),
 			Row({
 				opt: b.position,

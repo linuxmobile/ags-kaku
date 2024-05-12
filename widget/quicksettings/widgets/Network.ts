@@ -29,34 +29,34 @@ export const WifiSelection = () =>
 					self.hook(
 						wifi,
 						() =>
-						(self.children = wifi.access_points
-							.sort((a, b) => b.strength - a.strength)
-							.slice(0, 6)
-							.map((ap) =>
-								Widget.Button({
-									on_clicked: () => {
-										if (dependencies("nmcli"))
-											Utils.execAsync(
-												`nmcli device wifi connect ${ap.bssid}`,
-											);
-									},
-									child: Widget.Box({
-										children: [
-											Widget.Icon(ap.iconName),
-											Widget.Label(ap.ssid || ""),
-											Widget.Icon({
-												icon: icons.ui.tick,
-												hexpand: true,
-												hpack: "end",
-												setup: (self) =>
-													Utils.idle(() => {
-														if (!self.is_destroyed) self.visible = ap.active;
-													}),
-											}),
-										],
+							(self.children = wifi.access_points
+								.sort((a, b) => b.strength - a.strength)
+								.slice(0, 10)
+								.map((ap) =>
+									Widget.Button({
+										on_clicked: () => {
+											if (dependencies("nmcli"))
+												Utils.execAsync(
+													`nmcli device wifi connect ${ap.bssid}`,
+												);
+										},
+										child: Widget.Box({
+											children: [
+												Widget.Icon(ap.iconName),
+												Widget.Label(ap.ssid || ""),
+												Widget.Icon({
+													icon: icons.ui.tick,
+													hexpand: true,
+													hpack: "end",
+													setup: (self) =>
+														Utils.idle(() => {
+															if (!self.is_destroyed) self.visible = ap.active;
+														}),
+												}),
+											],
+										}),
 									}),
-								}),
-							)),
+								)),
 					),
 			}),
 			Widget.Separator(),
